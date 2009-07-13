@@ -15,7 +15,7 @@
 ;;
 ;; Move an immediate value (32-bit) into a register
 ;; Opcode: B8 +rd id
-(define (mov src dest)
+(define (mov dest src)
   (cond
    [(register? src)
     (list #x89 (modr/m dest src))]

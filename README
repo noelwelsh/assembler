@@ -1,0 +1,30 @@
+This is an assembler for 32-bit Intel x86 code (IA-32) written in PLT Scheme.
+
+Currently it is a proof of concept. See the code in test.ss for simple examples.
+
+
+
+The following documents have been referred to in the construction of this assembler
+
+AMD programmers manual and instruction reference at
+
+ http://www.amd.com/us-en/assets/content_type/white_papers_and_tech_docs/24592.pdf
+
+and 
+
+ http://www.amd.com/us-en/assets/content_type/white_papers_and_tech_docs/24594.pdf
+
+
+Intel references at
+
+ http://www.intel.com/products/processor/manuals/
+
+
+The source for Ikarus Scheme assembler at
+
+ http://bazaar.launchpad.net/~aghuloum/ikarus/ikarus.dev/annotate/head%3A/scheme/ikarus.intel-assembler.ss
+
+
+The Linux ABI at
+
+ http://www.sco.com/developers/devspecs/abi386-4.pdf

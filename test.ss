@@ -5,6 +5,7 @@
          "opcodes.ss"
          "register.ss")
 
+;; This is a function that returns 42
 (define the-answer
   (assemble (list
              (push ebp)
@@ -13,6 +14,8 @@
              (pop ebp)
              (ret))))
 
+;; This is a function that takes a pointer to character data
+;; and prints it on the console via an OS call (Linux only)
 (define hello
   (assemble (list
              (mov 4 eax)
@@ -26,9 +29,6 @@
 
 (require scheme/foreign)
 (unsafe!)
-(define libshim  (ffi-lib "shim"))
-(define shim
-  (get-ffi-obj "shim" libshim (_fun _bytes -> _int)))
 
 (define (dump-bytes bytes file-name)
   (with-output-to-file file-name
@@ -37,21 +37,15 @@
            (write-byte b)))
     #:exists 'replace))
 
-(dump-bytes the-answer "dump.s")
+;; Dump the code so we can disassemble it, if necessary
+(dump-bytes the-answer "the-answer.s")
 (dump-bytes hello "hello.s")
 
-(define (run)
+(define (run-the-answer)
   ((ffi-call the-answer null _int32)))
 
-(define hello-fn
-  (ffi-call hello (list _pointer) _void))
+(define (run-hello bytes)
+  ((ffi-call hello (list _pointer) _void)) bytes)
 
-(define (run-shim)
-  (shim the-answer))
-
-(provide the-answer
-         hello
-         hello-fn
-         run
-         run-shim
-         ffi-call)
+(provide run-the-answer
+         run-hello)

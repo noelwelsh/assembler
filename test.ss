@@ -17,22 +17,28 @@
   (assemble (list
              (mov 4 eax)
              (mov 1 ebx)
-             (pop ecx)
+             (pop ebp) ;; Pop off the return address
+             (pop ecx) ;; Pop off the first (and only) parameter
              (mov 5 edx)
-             (int 80)
+             (int #x80)
+             (pop ebp) ;; Pop the return address back
              (ret))))
 
 (require scheme/foreign)
 (unsafe!)
 (define libshim  (ffi-lib "shim"))
 (define shim
-  (get-ffi-obj "shim" libshim (_fun _pointer -> _int)))
+  (get-ffi-obj "shim" libshim (_fun _bytes -> _int)))
 
-(with-output-to-file "dump.o"
-  (lambda ()
-    (for ([b (in-bytes the-answer)])
-         (write-byte b)))
-  #:exists 'replace)
+(define (dump-bytes bytes file-name)
+  (with-output-to-file file-name
+    (lambda ()
+      (for ([b (in-bytes bytes)])
+           (write-byte b)))
+    #:exists 'replace))
+
+(dump-bytes the-answer "dump.s")
+(dump-bytes hello "hello.s")
 
 (define (run)
   ((ffi-call the-answer null _int32)))

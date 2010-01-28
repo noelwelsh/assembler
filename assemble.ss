@@ -1,7 +1,9 @@
 #lang scheme/base
 
-(require scheme/foreign
-         scheme/port)
+(require
+ scheme/foreign
+ "instruction.ss"
+ "integer.ss")
 
 (unsafe!)
 
@@ -12,19 +14,16 @@
    standard-lib
    (_fun (size : _long) -> (_bytes o size))))
 
-;; ((listof opcode) -> bytestring)
-(define (assemble opcodes)
-  (define code
-    (with-output-to-bytes
-     (lambda ()
-       (for-each
-        (lambda (opcode)
-          (for-each write-byte opcode))
-        opcodes))))
-  (define bytes (scheme_malloc_code (bytes-length code)))
-  (bytes-copy! bytes 0 code)
-  bytes)
-  
+
+(define-syntax-rule (assemble stmt ...)
+  (let* ([code
+          (let ([port (open-output-bytes)])
+            (with-current-assembler-port port
+              (begin stmt ...))
+            (get-output-bytes port))]
+         [bytes (scheme_malloc_code (bytes-length code))])
+    (bytes-copy! bytes 0 code)
+    bytes))
 
 (provide
  assemble)

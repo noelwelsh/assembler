@@ -23,11 +23,10 @@
 
 (define the-answer-disasm
   #<<END
-00000000  55                push bp
-00000001  89ED              mov bp,bp
-00000003  B82A00            mov ax,0x2a
-00000006  0000              add [bx+si],al
-00000008  5D                pop bp
+00000000  55                push ebp
+00000001  89ED              mov ebp,ebp
+00000003  B82A000000        mov eax,0x2a
+00000008  5D                pop ebp
 00000009  C3                ret
 END
 )
@@ -47,16 +46,13 @@ END
 
 (define hello-disasm
   #<<END
-00000000  B80400            mov ax,0x4
-00000003  0000              add [bx+si],al
-00000005  BB0100            mov bx,0x1
-00000008  0000              add [bx+si],al
-0000000A  5D                pop bp
-0000000B  59                pop cx
-0000000C  BA0500            mov dx,0x5
-0000000F  0000              add [bx+si],al
+00000000  B804000000        mov eax,0x4
+00000005  BB01000000        mov ebx,0x1
+0000000A  5D                pop ebp
+0000000B  59                pop ecx
+0000000C  BA05000000        mov edx,0x5
 00000011  CD80              int 0x80
-00000013  5D                pop bp
+00000013  5D                pop ebp
 00000014  C3                ret
 END
 )
@@ -68,7 +64,7 @@ END
 
 ;; Natural -> String
 (define (ndisasm n-chars)
-  (match (process (format "ndisasm ~a" file-name))
+  (match (process (format "ndisasm -u ~a" file-name))
     [(list out in pid err status)
      (status 'wait)
      (begin0

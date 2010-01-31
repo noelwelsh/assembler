@@ -8,9 +8,9 @@
 (define-struct register (name width code))
 
 (define eax (make-register 'eax 32 0))
-(define ecx (make-register 'eax 32 1))
-(define edx (make-register 'eax 32 2))
-(define ebx (make-register 'eax 32 3))
+(define ecx (make-register 'ecx 32 1))
+(define edx (make-register 'edx 32 2))
+(define ebx (make-register 'ebx 32 3))
 
 (define esp (make-register 'esp 32 4))
 (define ebp (make-register 'ebp 32 5))

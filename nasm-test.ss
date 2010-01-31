@@ -24,7 +24,7 @@
 (define the-answer-disasm
   #<<END
 00000000  55                push ebp
-00000001  89ED              mov ebp,ebp
+00000001  89EC              mov esp,ebp
 00000003  B82A000000        mov eax,0x2a
 00000008  5D                pop ebp
 00000009  C3                ret

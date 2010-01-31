@@ -57,10 +57,18 @@
                   [else reg])
                  3)
                 (cond
-                 [(register? reg)  (register-code reg)]
-                 [(reference? reg) (register-code (reference-register reg))]
+                 [(register? r/m)  (register-code r/m)]
+                 [(reference? r/m) (register-code (reference-register r/m))]
                  [else reg]))
    (current-assembler-port)))
+
+;; Register (U Register Reference) -> Void
+;;
+;; Implement standard ModR/M where the code determines addressing mode. Only references without displacements are currently implemented.
+(define (modr/m-std reg r/m)
+  (if (register? r/m)
+      (modr/m #b11 reg r/m)
+      (modr/m #b00 reg r/m)))
 
 ;; Integer -> Void
 (define (imm32 value)

@@ -57,6 +57,20 @@ END
 END
 )
 
+(define jumps
+  (assemble
+   (jmp -16)
+   (jmp -512)
+   (jmp eax)))
+
+(define jumps-disasm
+  #<<END
+00000000  E9F0FFFFFF        jmp dword 0xfffffff5
+00000005  E900020000        jmp dword 0x20a
+0000000A  FFE0              jmp eax
+END
+)
+
 (define (dump-bytes bytes)
   (with-output-to-file file-name
     (lambda () (write-bytes bytes))
@@ -80,5 +94,6 @@ END
 
 (define/provide-test-suite nasm-tests
   (check-ndisasm=? hello hello-disasm)
-  (check-ndisasm=? the-answer the-answer-disasm))
+  (check-ndisasm=? the-answer the-answer-disasm)
+  (check-ndisasm=? jumps jumps-disasm))
    

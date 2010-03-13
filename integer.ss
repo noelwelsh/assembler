@@ -34,6 +34,11 @@
 (define-instruction (ret)
   [() (instruction (opcode #xc3))])
 
+;; For now just a near jump, and we only support register, 32- and 8-bit offsets
+(define-instruction (jmp disp)
+  [(register?) (instruction (opcode #xff) (modr/m-std 4 disp))]
+  [(immu8?) (instruction (opcode #xeb) (immu8 disp))]
+  [(imm32?) (instruction (opcode #xe9) (imm32 disp))])
 
 (provide
  (all-defined-out))

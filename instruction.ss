@@ -1,6 +1,7 @@
 #lang scheme/base
 
 (require
+ scheme/fixnum
  (planet untyped/unlib/parameter)
  "register.ss"
  "reference.ss"
@@ -18,6 +19,10 @@
 ;; imm8? : Any -> Boolean
 (define (imm8? x)
   (and (exact-integer? x) (<= 0 x 255)))
+
+;; imm8? : Any -> Boolean
+(define (immu8? x)
+  (and (exact-integer? x) (<= -128 x 127)))
 
 (define-syntax (define-instruction stx)
   (syntax-case stx ()
@@ -77,6 +82,12 @@
 ;; Integer -> Void
 (define (imm8 value)
   (write-byte value (current-assembler-port)))
+
+;; Integer -> Void
+(define (immu8 value)
+  (if (< value 0)
+      (write-byte (fx+ 255 value) (current-assembler-port))
+      (write-byte value (current-assembler-port))))
 
 (provide
  (all-defined-out))

@@ -17,7 +17,7 @@
 (define-type-alias Arg (U Reg Imm Ref))
 (define-type-alias Reg (U Reg8 Reg16 Reg32 Reg64))
 
-;; A Ref is a reference to a memory location the value of which is stored in a register. This is represented in the Intel/AMD docs by reg/memX
+;; A Ref is a reference to a memory location the value of which is stored in a register. This is represented in the Intel/AMD docs by reg/memX. We don't encode all the possible addressing modes (well, I don't think we do) as it's too much craziness to process at once.
 (struct: Ref ([reg : Reg]))
 
 (struct: Reg8 ())
@@ -71,6 +71,7 @@
    ["AX" AX]
    ["EAX" EAX]
    ["RAX" RAX]
+   ;; NB: Error here. reg/memX means a register or a memory address given in a regiseter. The distinction is made by fiddling with the mod bits in the ModRM byte. So this should return two results, which suggests we really need a separate way of 
    ["reg/mem8" (Ref Any8)]
    ["reg/mem16" (Ref Any16)]
    ["reg/mem32" (Ref Any32)]
